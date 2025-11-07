@@ -38,9 +38,17 @@ const Navbar = () => {
         </Link>
         {/* Tampilkan link Transaksi HANYA jika sudah login  */}
         {isAuthenticated && (
-          <Link to="/transactions" style={NavLinkStyle}>
-            Transactions
-          </Link>
+          <>
+            {/* TAMBAHAN UNTUK CHECKOUT */}
+            <Link to="/checkout" style={NavLinkStyle}>
+              Checkout
+            </Link>
+            {/* AKHIR TAMBAHAN CHECKOUT */}
+
+            <Link to="/transactions" style={NavLinkStyle}>
+              Transactions
+            </Link>
+          </>
         )}
       </div>
 
