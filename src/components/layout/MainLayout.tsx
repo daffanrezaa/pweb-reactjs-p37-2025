@@ -1,20 +1,26 @@
-import { Outlet } from 'react-router-dom';
-import Navbar from './Navbar';
+// src/components/layout/MainLayout.tsx
 
-// Style sederhana untuk layout (bisa kamu pindah ke CSS)
-const mainContentStyle = {
-  padding: '1rem', // Beri jarak padding untuk konten halaman
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import Navbar from './Navbar'; 
+
+const fullWidthNavWrapperStyle = {
+  backgroundColor: '#3B572F', // Background hijau yang mengisi penuh
+  width: '100vw', // PENTING: Memastikan lebar 100% dari viewport
+  top: 0,
+  left: 0,
+  zIndex: 1000, // Agar tidak tertutup konten lain
 };
 
-const MainLayout = () => {
+const MainLayout: React.FC = () => {
   return (
-    <div>
-      <Navbar />
-      <main style={mainContentStyle}>
-        {/* <Outlet> adalah placeholder dari React Router */}
-        {/* Ini akan diisi oleh komponen halaman (misal: BookList) */}
-        <Outlet />
-      </main>
+    <div style={fullWidthNavWrapperStyle}>
+        <Navbar />
+      
+        {/* Konten Halaman lainnya (BookList, Checkout, dll) */}
+        <main style={{ padding: '20px', paddingTop: '80px' }}> {/* Tambah padding atas agar konten tidak tertutup fixed navbar */}
+            <Outlet />
+        </main>
     </div>
   );
 };

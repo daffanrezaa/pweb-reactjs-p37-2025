@@ -1,4 +1,3 @@
-// src/pages/transaction/TransactionList.tsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllTransactions } from '../../services/transactionService';
@@ -32,7 +31,7 @@ const TransactionsList: React.FC = () => {
 
     // --- Conditional Rendering: Loading, Error, Empty State ---
     if (loading) {
-        return <div style={{ textAlign: 'center', padding: '50px' }}>Memuat riwayat transaksi...</div>;
+        return <div style={{ textAlign: 'center', padding: '50px' }}>Load My Transactions</div>;
     }
 
     if (error) {
@@ -40,15 +39,12 @@ const TransactionsList: React.FC = () => {
     }
 
     if (transactions.length === 0) {
-        return <div style={{ textAlign: 'center', padding: '50px' }}>Anda belum memiliki riwayat transaksi.</div>;
+        return <div style={{ textAlign: 'center', padding: '50px' }}>You dont have any transactions!</div>;
     }
 
     return (
         <div style={{ padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
-            <h2>📋 Riwayat Transaksi Saya</h2>
-            
-            {/* Implementasi Search, Sort, Pagination di sini */}
-
+            <h2>My Transactions</h2>
             {transactions.map((tx) => (
                 <div 
                     key={tx.id} 
@@ -58,13 +54,13 @@ const TransactionsList: React.FC = () => {
                         marginBottom: '10px',
                         cursor: 'pointer' 
                     }}
-                    onClick={() => navigate(`/transactions/${tx.id}`)} // Arahkan ke Detail
+                    onClick={() => navigate(`/transactions/${tx.id}`)}
                 >
-                    <p><strong>ID Transaksi:</strong> {tx.id}</p>
-                    <p><strong>Tanggal:</strong> {new Date(tx.createdAt).toLocaleDateString('id-ID')}</p>
+                    <p><strong>Transaction ID:</strong> {tx.id}</p>
+                    <p><strong>Date:</strong> {new Date(tx.createdAt).toLocaleDateString('id-ID')}</p>
                     <p><strong>Total Item:</strong> {tx.orderItems.length} jenis buku</p>
-                    <p><strong>Total Harga:</strong> Rp{calculateTotalOrder(tx.orderItems).toLocaleString('id-ID')}</p>
-                    <small>Klik untuk melihat detail</small>
+                    <p><strong>Total Price:</strong> Rp{calculateTotalOrder(tx.orderItems).toLocaleString('id-ID')}</p>
+                    <small>Click for the details!</small>
                 </div>
             ))}
         </div>

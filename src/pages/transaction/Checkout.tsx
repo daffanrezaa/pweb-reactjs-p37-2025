@@ -1,10 +1,8 @@
-// src/pages/transaction/Checkout.tsx (Logic Checkout)
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createTransaction, getAllBooks } from '../../services/transactionService';
 import type { OrderItemInput, Book, CheckoutSuccessResponse } from '../../types/transaction'; 
 
-// [Konten Checkout.tsx sama persis dengan yang sebelumnya, hanya import yang diubah]
 interface CartItem {
     bookId: string;
     title: string;
@@ -89,7 +87,7 @@ const Checkout: React.FC = () => {
         try {
             const response: CheckoutSuccessResponse = await createTransaction(itemsToCheckout);
             
-            setCheckoutMessage(`Checkout berhasil! Total: Rp${response.total_price.toLocaleString('id-ID')}`);
+            setCheckoutMessage(`Checkout succeeded! Total: Rp${response.total_price.toLocaleString('id-ID')}`);
             setCart(prevCart => prevCart.map(item => ({ ...item, quantity: 0 }))); 
             
             setTimeout(() => {
@@ -120,7 +118,7 @@ const Checkout: React.FC = () => {
     // --- Tampilan Utama ---
     return (
         <div style={{ padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
-            <h2>🛒 Checkout / Buat Transaksi</h2>
+            <h2>Checkout Your Book Here!</h2>
             
             {checkoutMessage && (
                 <div style={{ color: 'green', marginBottom: '20px', padding: '10px', border: '1px solid green' }}>
@@ -136,10 +134,10 @@ const Checkout: React.FC = () => {
             <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px' }}>
                 <thead>
                     <tr style={{ borderBottom: '2px solid #ccc' }}>
-                        <th style={{ textAlign: 'left', padding: '10px' }}>Judul</th>
-                        <th style={{ padding: '10px' }}>Harga</th>
-                        <th style={{ padding: '10px' }}>Stok</th>
-                        <th style={{ padding: '10px' }}>Kuantitas</th>
+                        <th style={{ textAlign: 'left', padding: '10px' }}>Title</th>
+                        <th style={{ padding: '10px' }}>Price</th>
+                        <th style={{ padding: '10px' }}>Available Stock</th>
+                        <th style={{ padding: '10px' }}>Qty</th>
                         <th style={{ padding: '10px' }}>Subtotal</th>
                     </tr>
                 </thead>
@@ -167,7 +165,7 @@ const Checkout: React.FC = () => {
             </table>
 
             <div style={{ textAlign: 'right', marginTop: '20px' }}>
-                <h3>Total Pembayaran: Rp{calculateTotal().toLocaleString('id-ID')}</h3>
+                <h3>Order Total: Rp{calculateTotal().toLocaleString('id-ID')}</h3>
                 <button
                     onClick={handleCheckout}
                     disabled={isProcessing || calculateTotal() === 0}
@@ -181,7 +179,7 @@ const Checkout: React.FC = () => {
                         borderRadius: '5px'
                     }}
                 >
-                    {isProcessing ? 'Memproses...' : 'Lakukan Checkout'}
+                    {isProcessing ? 'Process...' : 'Checkout Now'}
                 </button>
             </div>
         </div>

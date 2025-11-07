@@ -1,23 +1,32 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
-// Style sederhana (bisa kamu pindah ke CSS)
+// Style sederhana (diperbarui dengan warna Hijau dan Krem)
 const navStyle = {
   display: 'flex',
-  justifyContent: 'space-between',
+  justifyContent: 'space-between', // Pisahkan Kiri dan Kanan
+  alignItems: 'center',
   padding: '1rem',
-  backgroundColor: '#eee',
+   
+  
+  // Konten Navbar (Link, Tombol) dibatasi dan terpusat
+  maxWidth: '1200px', 
+  margin: '0 auto', 
+  width: '100%', // Tambahkan ini agar margin auto bekerja optimal
 };
 
 const NavLinkStyle = {
   marginRight: '1rem',
   textDecoration: 'none',
-  color: '#333',
+  // UBAH: Warna link menjadi Krem
+  color: '#FFF5D1', 
 };
 
 const UserInfoStyle = {
   display: 'flex',
   alignItems: 'center',
+  // Tambahan: Agar text "Hi, user@email.com" juga berwarna Krem
+  color: '#FFF5D1', 
 };
 
 const Navbar = () => {
@@ -59,7 +68,19 @@ const Navbar = () => {
             <span style={{ marginRight: '1rem' }}>
               Hi, {user?.email} {/* Tampilkan email user  */}
             </span>
-            <button onClick={handleLogout}>Logout</button> {/* Tombol Logout  */}
+            {/* OPSI: Anda mungkin ingin memberi style khusus pada tombol Logout */}
+            <button 
+              onClick={handleLogout} 
+              style={{ 
+                backgroundColor: '#FFF5D1', 
+                color: '#333', 
+                border: 'none', 
+                padding: '8px 15px',
+                cursor: 'pointer'
+              }}
+            >
+              Logout
+            </button> 
           </>
         ) : (
           // === Tampilan Jika Belum Login ===
