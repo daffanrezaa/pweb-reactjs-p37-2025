@@ -1,0 +1,47 @@
+/* App Layout */
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f5f2e4; /* Cream light background */
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+  background: transparent;
+}
+
+/* Footer */
+.app-footer {
+  background: rgba(59, 87, 47, 0.05);
+  border-top: 1px solid rgba(59, 87, 47, 0.1);
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.app-footer p {
+  color: #57534e;
+  font-size: 0.875rem;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 2rem 1rem;
+  }
+
+  .app-footer {
+    padding: 1.25rem 1rem;
+  }
+
+  .app-footer p {
+    font-size: 0.8125rem;
+  }
+}
