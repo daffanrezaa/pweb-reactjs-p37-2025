@@ -40,7 +40,7 @@ const TransactionDetail: React.FC = () => {
     };
 
     if (loading) {
-        return <div style={{ textAlign: 'center', padding: '50px' }}>Load Transaction Details...</div>;
+        return <div style={{ textAlign: 'center', padding: '50px' }}>Loading Transaction Details...</div>;
     }
 
     if (error) {
@@ -53,16 +53,27 @@ const TransactionDetail: React.FC = () => {
 
     return (
         <div style={{ padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
-            <button onClick={() => navigate('/transactions')} style={{ marginBottom: '15px', padding: '8px 15px' }}>
-                &larr; Back
+            <button 
+                onClick={() => navigate('/history')} 
+                style={{ 
+                    marginBottom: '15px', 
+                    padding: '8px 15px',
+                    cursor: 'pointer',
+                    background: '#3B572F',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '5px'
+                }}
+            >
+                &larr; Back to History
             </button>
             
             <h2>Transaction Details: {transaction.id.substring(0, 8)}...</h2>
             
-            <div style={{ border: '1px solid #ccc', padding: '15px', marginBottom: '20px' }}>
+            <div style={{ border: '1px solid #ccc', padding: '15px', marginBottom: '20px', borderRadius: '8px' }}>
                 <p><strong>Buyer:</strong> {transaction.user.username} ({transaction.user.email})</p>
                 <p><strong>Transaction Date:</strong> {new Date(transaction.createdAt).toLocaleString('id-ID')}</p>
-                <p><strong>Total Item:</strong> {transaction.orderItems.length} jenis</p>
+                <p><strong>Total Items:</strong> {transaction.orderItems.length} type(s)</p>
             </div>
             
             <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px' }}>

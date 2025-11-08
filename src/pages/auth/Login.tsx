@@ -58,7 +58,7 @@ const Login = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
+              placeholder="wiener@gmail.com"
               className={error ? 'input-error' : ''}
               autoComplete="email"
               disabled={isLoading}

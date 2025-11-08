@@ -101,13 +101,13 @@ const Register = () => {
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
-            <label htmlFor="username">Username (Optional)</label>
+            <label htmlFor="username">Username </label>
             <input
               id="username"
               type="text"
               value={formData.username}
               onChange={handleChange('username')}
-              placeholder="John Doe"
+              placeholder="Wiener"
               autoComplete="name"
               disabled={isLoading}
             />
@@ -122,7 +122,7 @@ const Register = () => {
               type="email"
               value={formData.email}
               onChange={handleChange('email')}
-              placeholder="you@example.com"
+              placeholder="wiener@gmail.com"
               className={error ? 'input-error' : ''}
               autoComplete="email"
               disabled={isLoading}

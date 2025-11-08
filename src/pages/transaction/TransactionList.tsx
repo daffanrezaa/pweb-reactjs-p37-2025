@@ -31,7 +31,7 @@ const TransactionsList: React.FC = () => {
 
     // --- Conditional Rendering: Loading, Error, Empty State ---
     if (loading) {
-        return <div style={{ textAlign: 'center', padding: '50px' }}>Load My Transactions</div>;
+        return <div style={{ textAlign: 'center', padding: '50px' }}>Loading History...</div>;
     }
 
     if (error) {
@@ -39,12 +39,19 @@ const TransactionsList: React.FC = () => {
     }
 
     if (transactions.length === 0) {
-        return <div style={{ textAlign: 'center', padding: '50px' }}>You dont have any transactions!</div>;
+        return (
+            <div style={{ textAlign: 'center', padding: '50px' }}>
+                <h2>History</h2>
+                <p>You don't have any transaction history yet!</p>
+            </div>
+        );
     }
 
     return (
         <div style={{ padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
-            <h2>My Transactions</h2>
+            <h2>History</h2>
+            <p style={{ color: '#666', marginBottom: '20px' }}>View your past transactions and orders</p>
+            
             {transactions.map((tx) => (
                 <div 
                     key={tx.id} 
@@ -52,15 +59,25 @@ const TransactionsList: React.FC = () => {
                         border: '1px solid #ddd', 
                         padding: '15px', 
                         marginBottom: '10px',
-                        cursor: 'pointer' 
+                        cursor: 'pointer',
+                        borderRadius: '8px',
+                        transition: 'all 0.3s ease'
                     }}
-                    onClick={() => navigate(`/transactions/${tx.id}`)}
+                    onClick={() => navigate(`/history/${tx.id}`)}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+                        e.currentTarget.style.borderColor = '#3B572F';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.borderColor = '#ddd';
+                    }}
                 >
-                    <p><strong>Transaction ID:</strong> {tx.id}</p>
+                    <p><strong>Transaction ID:</strong> {tx.id.substring(0, 8)}...</p>
                     <p><strong>Date:</strong> {new Date(tx.createdAt).toLocaleDateString('id-ID')}</p>
-                    <p><strong>Total Item:</strong> {tx.orderItems.length} jenis buku</p>
+                    <p><strong>Total Items:</strong> {tx.orderItems.length} book(s)</p>
                     <p><strong>Total Price:</strong> Rp{calculateTotalOrder(tx.orderItems).toLocaleString('id-ID')}</p>
-                    <small>Click for the details!</small>
+                    <small style={{ color: '#666' }}>Click to view details</small>
                 </div>
             ))}
         </div>

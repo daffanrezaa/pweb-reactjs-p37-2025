@@ -6,34 +6,24 @@ import ProtectedRoute from './components/layout/ProtectedRoute';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 
-// 2. Import Halaman Buku (Kita biarkan placeholder)
-// import BookList from './pages/book/BookList';
-// import BookDetail from './pages/book/BookDetail';
-// import BookListByGenre from './pages/book/BookListByGenre';
-// import AddBook from './pages/book/AddBook';
+// 2. Import Halaman Buku - NOW COMPLETE!
+import BookList from './pages/book/BookList';
+import BookDetail from './pages/book/BookDetail';
+import AddBook from './pages/book/AddBook';
 
-// 3. Import Halaman Genre (Kita biarkan placeholder)
-// import GenreList from './pages/genre/GenreList';
-// import GenreDetail from './pages/genre/GenreDetail';
-
-// 4. Import Halaman Transaksi
+// 3. Import Halaman Transaksi
 import TransactionList from './pages/transaction/TransactionList';
 import TransactionDetail from './pages/transaction/TransactionDetail';
 import Checkout from './pages/transaction/Checkout';
-// import TransactionStats from './pages/transaction/TransactionStats'; // Biarkan dulu jika belum dibuat
 
-// Placeholder yang TIDAK DIGUNAKAN untuk Transaksi Dihapus
-const BookList = () => <div>Halaman Daftar Buku (Home)</div>;
-const BookDetail = () => <div>Halaman Detail Buku</div>;
-const BookListByGenre = () => <div>Halaman Buku Berdasarkan Genre</div>;
-const AddBook = () => <div>Halaman Tambah Buku</div>;
-const GenreList = () => <div>Halaman Daftar Genre</div>;
-const GenreDetail = () => <div>Halaman Detail Genre</div>;
-// const TransactionList = () => <div>Halaman List Transaksi</div>; // DIHAPUS, DIGANTI IMPORT ASLI
-// const TransactionDetail = () => <div>Halaman Detail Transaksi</div>; // DIHAPUS, DIGANTI IMPORT ASLI
-const TransactionStats = () => <div>Halaman Statistik Transaksi</div>; // Biarkan placeholder jika belum dibuat
-const NotFound = () => <div>404 - Halaman Tidak Ditemukan</div>;
-
+// Placeholder components
+const TransactionStats = () => <div>Halaman Statistik Transaksi</div>;
+const NotFound = () => (
+  <div style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+    <h1 style={{ fontSize: '4rem', margin: 0 }}>404</h1>
+    <p style={{ fontSize: '1.25rem', color: '#666' }}>Page Not Found</p>
+  </div>
+);
 
 function App() {
   return (
@@ -45,13 +35,12 @@ function App() {
       {/* Rute Utama (Dengan Navbar, dibungkus MainLayout) */}
       <Route element={<MainLayout />}>
         
-        {/* --- LIBRARY (BOOKS) --- (Tetap menggunakan placeholder) */}
+        {/* --- BOOKS MANAGEMENT --- */}
+        {/* Public: Anyone can view books */}
         <Route path="/" element={<BookList />} />
         <Route path="/books/:book_id" element={<BookDetail />} /> 
-        <Route
-          path="/books/genre/:genre_id" 
-          element={<BookListByGenre />}
-        />
+        
+        {/* Protected: Only authenticated users can add books */}
         <Route
           path="/books/add"
           element={
@@ -61,25 +50,21 @@ function App() {
           }
         />
 
-        {/* --- GENRE --- (Tetap menggunakan placeholder) */}
-        <Route path="/genre" element={<GenreList />} />
-        <Route path="/genre/:genre_id" element={<GenreDetail />} />
-
-        {/* --- TRANSACTIONS --- (KOMPONEN ANDA YANG SUDAH JADI) */}
+        {/* --- TRANSACTIONS & CHECKOUT --- */}
         
-        {/* Rute 1: Checkout (Membuat Transaksi) */}
+        {/* Shopping Cart (Checkout - Membuat Transaksi) */}
         <Route
-          path="/checkout" // <-- RUTE BARU UNTUK CHECKOUT
+          path="/checkout"
           element={
             <ProtectedRoute>
-              <Checkout /> {/* <-- Menggunakan Komponen Checkout ASLI */}
+              <Checkout />
             </ProtectedRoute>
           }
         />
         
-        {/* Rute 2: List Transaksi (Riwayat) */}
+        {/* History (List Transaksi) */}
         <Route
-          path="/transactions"
+          path="/history"
           element={
             <ProtectedRoute>
               <TransactionList />
@@ -87,9 +72,9 @@ function App() {
           }
         />
         
-        {/* Rute 3: Statistik Transaksi (Biarkan placeholder/komponen teman) */}
+        {/* Statistik Transaksi (Optional) */}
         <Route
-          path="/transactions/statistics" 
+          path="/history/statistics" 
           element={
             <ProtectedRoute>
               <TransactionStats /> 
@@ -97,9 +82,9 @@ function App() {
           }
         />
         
-        {/* Rute 4: Detail Transaksi */}
+        {/* Detail Transaksi History */}
         <Route
-          path="/transactions/:transaction_id" 
+          path="/history/:transaction_id" 
           element={
             <ProtectedRoute>
               <TransactionDetail />
