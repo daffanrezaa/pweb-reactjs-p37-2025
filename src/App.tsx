@@ -6,7 +6,7 @@ import ProtectedRoute from './components/layout/ProtectedRoute';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 
-// 2. Import Halaman Buku - NOW COMPLETE!
+// 2. Import Halaman Buku
 import BookList from './pages/book/BookList';
 import BookDetail from './pages/book/BookDetail';
 import AddBook from './pages/book/AddBook';
@@ -17,7 +17,6 @@ import TransactionDetail from './pages/transaction/TransactionDetail';
 import Checkout from './pages/transaction/Checkout';
 
 // Placeholder components
-const TransactionStats = () => <div>Halaman Statistik Transaksi</div>;
 const NotFound = () => (
   <div style={{ textAlign: 'center', padding: '4rem 2rem' }}>
     <h1 style={{ fontSize: '4rem', margin: 0 }}>404</h1>
@@ -62,9 +61,9 @@ function App() {
           }
         />
         
-        {/* History (List Transaksi) */}
+        {/* Transaction List - CHANGED FROM /history to /transactions */}
         <Route
-          path="/history"
+          path="/transactions"
           element={
             <ProtectedRoute>
               <TransactionList />
@@ -72,19 +71,9 @@ function App() {
           }
         />
         
-        {/* Statistik Transaksi (Optional) */}
+        {/* Transaction Detail - CHANGED FROM /history/:transaction_id to /transactions/:id */}
         <Route
-          path="/history/statistics" 
-          element={
-            <ProtectedRoute>
-              <TransactionStats /> 
-            </ProtectedRoute>
-          }
-        />
-        
-        {/* Detail Transaksi History */}
-        <Route
-          path="/history/:transaction_id" 
+          path="/transactions/:id"
           element={
             <ProtectedRoute>
               <TransactionDetail />

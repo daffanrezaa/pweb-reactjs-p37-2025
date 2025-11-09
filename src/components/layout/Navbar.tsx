@@ -42,19 +42,19 @@ const Navbar = () => {
           
           {isAuthenticated && (
             <Link 
-              to="/history" 
-              className={`nav-link ${isActive('/history') ? 'active' : ''}`}
+              to="/transactions" 
+              className={`nav-link ${isActive('/transactions') ? 'active' : ''}`}
             >
-              History
+              Transactions
             </Link>
           )}
         </div>
 
-        {/* User Section - UPDATED ORDER */}
+        {/* User Section */}
         <div className="navbar-user desktop">
           {isAuthenticated ? (
             <>
-              {/* Shopping Cart - Moved before user info */}
+              {/* Shopping Cart */}
               <Link 
                 to="/checkout" 
                 className={`nav-link ${isActive('/checkout') ? 'active' : ''}`}
@@ -154,11 +154,11 @@ const Navbar = () => {
                   </span>
                 </Link>
                 <Link 
-                  to="/history" 
-                  className={`mobile-nav-link ${isActive('/history') ? 'active' : ''}`}
+                  to="/transactions" 
+                  className={`mobile-nav-link ${isActive('/transactions') ? 'active' : ''}`}
                   onClick={closeMobileMenu}
                 >
-                  History
+                  Transactions
                 </Link>
               </div>
 
