@@ -19,6 +19,7 @@ const AddBook: React.FC = () => {
     price: 0,
     stockQuantity: 0,
     genreId: '',
+    image: '',
     isbn: '',
     description: '',
     publicationYear: undefined,
@@ -106,6 +107,7 @@ const AddBook: React.FC = () => {
       if (formData.description?.trim()) dataToSubmit.description = formData.description.trim();
       if (formData.publicationYear) dataToSubmit.publicationYear = formData.publicationYear;
       if (formData.condition) dataToSubmit.condition = formData.condition;
+      if (formData.image?.trim()) dataToSubmit.image = formData.image.trim(); 
 
       const newBook = await createBook(dataToSubmit);
       navigate(`/books/${newBook.id}`);
@@ -318,6 +320,22 @@ const AddBook: React.FC = () => {
                 <option value="fair">Fair</option>
                 <option value="poor">Poor</option>
               </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="image">Book Cover Image URL</label>
+                <input
+                  type="url"
+                  id="image"
+                  name="image"
+                  value={formData.image || ''}
+                  onChange={handleChange}
+                  placeholder="https://cdn.gramedia.com/uploads/items/book-cover.jpg"
+                  disabled={loading}
+                />
+                  <small className="input-hint">
+                  Enter the URL of the book cover image
+                  </small>
             </div>
 
             <div className="form-group">

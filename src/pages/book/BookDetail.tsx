@@ -125,7 +125,19 @@ const BookDetail: React.FC = () => {
 
       {/* Book Detail Card */}
       <div className="book-detail-card">
-        {/* Header with Title and Actions */}
+      {/* Header with Title and Actions */}
+        {book.image && (
+          <div className="book-detail-image">
+            <img 
+              src={book.image} 
+              alt={book.title}
+              onError={(e) => {
+                e.currentTarget.parentElement!.style.display = 'none';
+              }}
+            />
+          </div>
+        )}
+
         <div className="book-detail-header">
           <div className="book-title-section">
             <h1>{book.title}</h1>

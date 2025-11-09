@@ -15,6 +15,7 @@ export interface Book {
   stockQuantity: number;
   genreId: string;
   genre: Genre;
+  image?: string;
   isbn?: string;
   description?: string;
   publicationYear?: number;
@@ -30,6 +31,7 @@ export interface BookInput {
   price: number;
   stockQuantity: number;
   genreId: string;
+  image?: string;
   isbn?: string;
   description?: string;
   publicationYear?: number;

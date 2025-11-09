@@ -230,8 +230,20 @@ const BookList: React.FC = () => {
                 <div
                   key={book.id}
                   className="book-card"
-                  onClick={() => navigate(`/books/${book.id}`)}
-                >
+                  onClick={() => navigate(`/books/${book.id}`)}>
+                    
+                  {book.image && (
+                    <div className="book-cover">
+                      <img 
+                         src={book.image} 
+                         alt={book.title}
+                         onError={(e) => {
+                           e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      </div>
+                  )}
+
                   <div className="book-card-header">
                     <h3>{book.title}</h3>
                     {book.condition && (
