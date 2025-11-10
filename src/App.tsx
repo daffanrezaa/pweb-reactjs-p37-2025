@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './hooks/useAuth';
 
 // 1. Import Layout & Halaman Auth
 import MainLayout from './components/layout/MainLayout';
@@ -24,9 +25,39 @@ const NotFound = () => (
   </div>
 );
 
+// ✅ NEW: Root redirect component
+const RootRedirect = () => {
+  const { isAuthenticated, isLoading } = useAuth();
+  
+  if (isLoading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        minHeight: '100vh' 
+      }}>
+        <div style={{ 
+          width: '48px', 
+          height: '48px', 
+          border: '4px solid #EDE8D0',
+          borderTopColor: '#3B572F',
+          borderRadius: '50%',
+          animation: 'spin 0.8s linear infinite'
+        }}></div>
+      </div>
+    );
+  }
+  
+  return <Navigate to={isAuthenticated ? "/books" : "/login"} replace />;
+};
+
 function App() {
   return (
     <Routes>
+      {/* ✅ CHANGED: Root redirect based on auth status */}
+      <Route path="/" element={<RootRedirect />} />
+      
       {/* Rute Publik: Login & Register (Tanpa Navbar) */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
@@ -35,9 +66,9 @@ function App() {
       <Route element={<MainLayout />}>
         
         {/* --- BOOKS MANAGEMENT --- */}
-        {/* Public: Anyone can view books */}
-        <Route path="/" element={<BookList />} />
-        <Route path="/books/:book_id" element={<BookDetail />} /> 
+        {/* ✅ CHANGED: BookList now at /books */}
+        <Route path="/books" element={<ProtectedRoute> <BookList /> </ProtectedRoute>} />
+        <Route path="/books/:book_id" element={<ProtectedRoute> <BookDetail /> </ProtectedRoute>} /> 
         
         {/* Protected: Only authenticated users can add books */}
         <Route
@@ -61,7 +92,7 @@ function App() {
           }
         />
         
-        {/* Transaction List - CHANGED FROM /history to /transactions */}
+        {/* Transaction List */}
         <Route
           path="/transactions"
           element={
@@ -71,7 +102,7 @@ function App() {
           }
         />
         
-        {/* Transaction Detail - CHANGED FROM /history/:transaction_id to /transactions/:id */}
+        {/* Transaction Detail */}
         <Route
           path="/transactions/:id"
           element={

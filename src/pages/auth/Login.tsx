@@ -34,7 +34,7 @@ const Login = () => {
 
     try {
       await login({ email, password });
-      navigate('/');
+      navigate('/books');
     } catch (err: any) {
       setError(err.message || 'Login failed. Please check your credentials.');
     } finally {

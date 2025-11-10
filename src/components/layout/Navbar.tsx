@@ -23,14 +23,14 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         {/* Logo/Brand */}
-        <Link to="/" className="navbar-brand" onClick={closeMobileMenu}>
+        <Link to="/books" className="navbar-brand" onClick={closeMobileMenu}>
           <span>P37 Literature Shop</span>
         </Link>
 
         {/* Desktop Navigation */}
         <div className="navbar-menu desktop">
           <Link 
-            to="/" 
+            to="/books" 
             className={`nav-link ${isActive('/') ? 'active' : ''}`}
           >
             Books
