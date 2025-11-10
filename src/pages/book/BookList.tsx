@@ -11,11 +11,11 @@ const BookList: React.FC = () => {
   
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
   // Filter & Search States
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchInput, setSearchInput] = useState('');
   const [condition, setCondition] = useState('');
   const [sortBy, setSortBy] = useState<'title' | 'publicationYear'>('title');
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
@@ -23,14 +23,21 @@ const BookList: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   
-  const itemsPerPage = 10;
+  const itemsPerPage = 12; // Show 12 books per load
 
   useEffect(() => {
-    fetchBooks();
-  }, [searchTerm, condition, sortBy, order, currentPage]);
+    // Reset to page 1 when filters change
+    setCurrentPage(1);
+    setBooks([]);
+    fetchBooks(1, true);
+  }, [searchTerm, condition, sortBy, order]);
 
-  const fetchBooks = async () => {
-    setLoading(true);
+  const fetchBooks = async (page: number = currentPage, reset: boolean = false) => {
+    if (reset) {
+      setLoading(true);
+    } else {
+      setLoadingMore(true);
+    }
     setError(null);
     
     try {
@@ -39,37 +46,57 @@ const BookList: React.FC = () => {
         condition: condition || undefined,
         sortBy,
         order,
-        page: currentPage,
+        page: page,
         limit: itemsPerPage,
       };
       
       const response = await getAllBooks(params);
-      setBooks(response.data);
+      
+      if (reset) {
+        setBooks(response.data);
+      } else {
+        setBooks(prev => [...prev, ...response.data]);
+      }
       
       if (response.pagination) {
         setTotalPages(response.pagination.totalPages);
         setTotalItems(response.pagination.totalItems);
+        setCurrentPage(page);
       }
     } catch (err: any) {
       setError(err.message || 'Failed to fetch books');
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   };
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSearchTerm(searchInput);
-    setCurrentPage(1);
+  const handleShowMore = () => {
+    const nextPage = currentPage + 1;
+    fetchBooks(nextPage, false);
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+  };
+
+  const handleConditionChange = (value: string) => {
+    setCondition(value);
+  };
+
+  const handleSortByChange = (value: 'title' | 'publicationYear') => {
+    setSortBy(value);
+  };
+
+  const handleOrderChange = (value: 'asc' | 'desc') => {
+    setOrder(value);
   };
 
   const handleClearFilters = () => {
-    setSearchInput('');
     setSearchTerm('');
     setCondition('');
     setSortBy('title');
     setOrder('asc');
-    setCurrentPage(1);
   };
 
   const formatPrice = (price: number) => {
@@ -128,30 +155,41 @@ const BookList: React.FC = () => {
 
       {/* Filters & Search */}
       <div className="filters-section">
-        <form onSubmit={handleSearchSubmit} className="search-form">
-          <div className="search-input-group">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <circle cx="11" cy="11" r="8" strokeWidth="2"/>
-              <path d="m21 21-4.35-4.35" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
+        <div style={{ 
+          display: 'flex',
+          gap: '1rem',
+          flexWrap: 'wrap',
+          alignItems: 'flex-end'
+        }}>
+          {/* Search Input */}
+          <div className="filter-group" style={{ flex: '1 1 300px' }}>
+            <label htmlFor="search">Search Books:</label>
             <input
+              id="search"
               type="text"
               placeholder="Search by title, writer, or publisher..."
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              className="search-input"
+              value={searchTerm}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '0.625rem 0.875rem',
+                border: '2px solid var(--gray-200)',
+                borderRadius: '6px',
+                fontSize: '0.9375rem',
+                fontFamily: 'Poppins, sans-serif',
+                color: 'var(--gray-800)',
+                background: 'white',
+                transition: 'all 0.3s ease'
+              }}
             />
-            <button type="submit" className="btn-search">Search</button>
           </div>
-        </form>
 
-        <div className="filter-controls">
           <div className="filter-group">
             <label htmlFor="condition">Condition:</label>
             <select
               id="condition"
               value={condition}
-              onChange={(e) => { setCondition(e.target.value); setCurrentPage(1); }}
+              onChange={(e) => handleConditionChange(e.target.value)}
               className="filter-select"
             >
               <option value="">All Conditions</option>
@@ -168,7 +206,7 @@ const BookList: React.FC = () => {
             <select
               id="sortBy"
               value={sortBy}
-              onChange={(e) => { setSortBy(e.target.value as 'title' | 'publicationYear'); setCurrentPage(1); }}
+              onChange={(e) => handleSortByChange(e.target.value as 'title' | 'publicationYear')}
               className="filter-select"
             >
               <option value="title">Title</option>
@@ -181,7 +219,7 @@ const BookList: React.FC = () => {
             <select
               id="order"
               value={order}
-              onChange={(e) => { setOrder(e.target.value as 'asc' | 'desc'); setCurrentPage(1); }}
+              onChange={(e) => handleOrderChange(e.target.value as 'asc' | 'desc')}
               className="filter-select"
             >
               <option value="asc">Ascending</option>
@@ -208,11 +246,7 @@ const BookList: React.FC = () => {
       )}
 
       {/* Books Grid */}
-      {loading ? (
-        <div className="loading-overlay">
-          <div className="spinner-large"></div>
-        </div>
-      ) : books.length === 0 ? (
+      {books.length === 0 && !loading ? (
         <div className="empty-state">
           <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" strokeWidth="2"/>
@@ -282,28 +316,38 @@ const BookList: React.FC = () => {
             })}
           </div>
 
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="pagination">
+          {/* Show More Button */}
+          {currentPage < totalPages && (
+            <div className="show-more-container">
               <button
-                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                className="pagination-btn"
+                onClick={handleShowMore}
+                disabled={loadingMore}
+                className="btn-show-more"
               >
-                Previous
+                {loadingMore ? (
+                  <>
+                    <span className="spinner-small"></span>
+                    Loading more books...
+                  </>
+                ) : (
+                  <>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <polyline points="6 9 12 15 18 9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    Show More ({books.length} of {totalItems})
+                  </>
+                )}
               </button>
-              
-              <div className="pagination-info">
-                Page {currentPage} of {totalPages}
-              </div>
-              
-              <button
-                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-                className="pagination-btn"
-              >
-                Next
-              </button>
+            </div>
+          )}
+
+          {/* Loaded All Books Message */}
+          {currentPage >= totalPages && books.length > 0 && (
+            <div className="all-loaded-message">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polyline points="20 6 9 17 4 12" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <p>All {totalItems} books loaded</p>
             </div>
           )}
         </>
@@ -313,3 +357,4 @@ const BookList: React.FC = () => {
 };
 
 export default BookList;
+

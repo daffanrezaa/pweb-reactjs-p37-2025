@@ -12,7 +12,7 @@ import type {
 } from '../types/book';
 
 const BOOK_API = '/books';
-const GENRE_API = '/genres';
+const GENRE_API = '/genre';
 
 // Get All Books (with filters, search, sort, pagination)
 export const getAllBooks = async (params?: BookListParams): Promise<BookListResponse> => {

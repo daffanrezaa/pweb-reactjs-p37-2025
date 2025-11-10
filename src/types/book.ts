@@ -15,10 +15,10 @@ export interface Book {
   stockQuantity: number;
   genreId: string;
   genre: Genre;
+  publicationYear: number; 
   image?: string;
   isbn?: string;
   description?: string;
-  publicationYear?: number;
   condition?: 'new' | 'like_new' | 'good' | 'fair' | 'poor';
   createdAt?: string;
   updatedAt?: string;
@@ -31,10 +31,10 @@ export interface BookInput {
   price: number;
   stockQuantity: number;
   genreId: string;
+  publicationYear: number; // ✅ FIXED: Changed from optional to REQUIRED
   image?: string;
   isbn?: string;
   description?: string;
-  publicationYear?: number;
   condition?: 'new' | 'like_new' | 'good' | 'fair' | 'poor';
 }
 

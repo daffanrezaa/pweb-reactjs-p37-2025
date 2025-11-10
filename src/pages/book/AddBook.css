@@ -1,3 +1,5 @@
+/* src/pages/book/AddBook.css */
+
 /* Add Book Container */
 .add-book-container {
   width: 100%;
@@ -158,6 +160,14 @@
   background-position: right 0.875rem center;
   background-size: 20px;
   padding-right: 3rem;
+}
+
+/* Input Hint */
+.input-hint {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  font-family: 'Poppins', sans-serif;
+  margin-top: 0.25rem;
 }
 
 /* Form Actions */

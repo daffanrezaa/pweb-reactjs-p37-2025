@@ -1,3 +1,4 @@
+// src/pages/book/AddBook.tsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createBook, getAllGenres } from '../../services/bookService';
@@ -19,10 +20,10 @@ const AddBook: React.FC = () => {
     price: 0,
     stockQuantity: 0,
     genreId: '',
+    publicationYear: new Date().getFullYear(), // SET DEFAULT VALUE
     image: '',
     isbn: '',
     description: '',
-    publicationYear: undefined,
     condition: undefined,
   });
 
@@ -89,11 +90,15 @@ const AddBook: React.FC = () => {
       setError('Please select a genre');
       return;
     }
+    // ADD VALIDATION FOR PUBLICATION YEAR
+    if (!formData.publicationYear || formData.publicationYear < 1000) {
+      setError('Publication year is required and must be valid');
+      return;
+    }
 
     setLoading(true);
     
     try {
-      // Clean up optional fields
       const dataToSubmit: BookInput = {
         title: formData.title.trim(),
         writer: formData.writer.trim(),
@@ -101,11 +106,11 @@ const AddBook: React.FC = () => {
         price: formData.price,
         stockQuantity: formData.stockQuantity,
         genreId: formData.genreId,
+        publicationYear: formData.publicationYear, // ALWAYS INCLUDED NOW
       };
 
       if (formData.isbn?.trim()) dataToSubmit.isbn = formData.isbn.trim();
       if (formData.description?.trim()) dataToSubmit.description = formData.description.trim();
-      if (formData.publicationYear) dataToSubmit.publicationYear = formData.publicationYear;
       if (formData.condition) dataToSubmit.condition = formData.condition;
       if (formData.image?.trim()) dataToSubmit.image = formData.image.trim(); 
 
@@ -157,10 +162,11 @@ const AddBook: React.FC = () => {
         )}
 
         <form onSubmit={handleSubmit} className="book-form">
-          {/* Required Fields Section */}
+          {/* ========== REQUIRED FIELDS SECTION ========== */}
           <div className="form-section">
             <h3>Basic Information <span className="required-badge">Required</span></h3>
             
+            {/* Title - Full Width */}
             <div className="form-group">
               <label htmlFor="title">
                 Book Title <span className="required-star">*</span>
@@ -177,6 +183,7 @@ const AddBook: React.FC = () => {
               />
             </div>
 
+            {/* Writer & Publisher - 2 Columns */}
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="writer">
@@ -211,6 +218,7 @@ const AddBook: React.FC = () => {
               </div>
             </div>
 
+            {/* Price & Stock - 2 Columns */}
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="price">
@@ -248,48 +256,33 @@ const AddBook: React.FC = () => {
               </div>
             </div>
 
-            <div className="form-group">
-              <label htmlFor="genreId">
-                Genre <span className="required-star">*</span>
-              </label>
-              <select
-                id="genreId"
-                name="genreId"
-                value={formData.genreId}
-                onChange={handleChange}
-                required
-                disabled={loading}
-              >
-                <option value="">Select a genre</option>
-                {genres.map((genre) => (
-                  <option key={genre.id} value={genre.id}>
-                    {genre.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Optional Fields Section */}
-          <div className="form-section">
-            <h3>Additional Details <span className="optional-badge">Optional</span></h3>
-            
+            {/* ===== GENRE & PUBLICATION YEAR - 2 COLUMNS ===== */}
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="isbn">ISBN</label>
-                <input
-                  type="text"
-                  id="isbn"
-                  name="isbn"
-                  value={formData.isbn}
+                <label htmlFor="genreId">
+                  Genre <span className="required-star">*</span>
+                </label>
+                <select
+                  id="genreId"
+                  name="genreId"
+                  value={formData.genreId}
                   onChange={handleChange}
-                  placeholder="Enter ISBN (e.g., 978-3-16-148410-0)"
+                  required
                   disabled={loading}
-                />
+                >
+                  <option value="">Select a genre</option>
+                  {genres.map((genre) => (
+                    <option key={genre.id} value={genre.id}>
+                      {genre.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="form-group">
-                <label htmlFor="publicationYear">Publication Year</label>
+                <label htmlFor="publicationYear">
+                  Publication Year <span className="required-star">*</span>
+                </label>
                 <input
                   type="number"
                   id="publicationYear"
@@ -299,11 +292,32 @@ const AddBook: React.FC = () => {
                   placeholder="YYYY"
                   min="1000"
                   max={new Date().getFullYear()}
+                  required
                   disabled={loading}
                 />
               </div>
             </div>
+          </div>
 
+          {/* ========== OPTIONAL FIELDS SECTION ========== */}
+          <div className="form-section">
+            <h3>Additional Details <span className="optional-badge">Optional</span></h3>
+            
+            {/* ISBN - Full Width (PANJANG) */}
+            <div className="form-group">
+              <label htmlFor="isbn">ISBN</label>
+              <input
+                type="text"
+                id="isbn"
+                name="isbn"
+                value={formData.isbn}
+                onChange={handleChange}
+                placeholder="Enter ISBN (e.g., 978-3-16-148410-0)"
+                disabled={loading}
+              />
+            </div>
+
+            {/* Condition - Full Width */}
             <div className="form-group">
               <label htmlFor="condition">Condition</label>
               <select
@@ -322,22 +336,24 @@ const AddBook: React.FC = () => {
               </select>
             </div>
 
+            {/* Image URL - Full Width */}
             <div className="form-group">
               <label htmlFor="image">Book Cover Image URL</label>
-                <input
-                  type="url"
-                  id="image"
-                  name="image"
-                  value={formData.image || ''}
-                  onChange={handleChange}
-                  placeholder="https://cdn.gramedia.com/uploads/items/book-cover.jpg"
-                  disabled={loading}
-                />
-                  <small className="input-hint">
-                  Enter the URL of the book cover image
-                  </small>
+              <input
+                type="url"
+                id="image"
+                name="image"
+                value={formData.image || ''}
+                onChange={handleChange}
+                placeholder="https://cdn.gramedia.com/uploads/items/book-cover.jpg"
+                disabled={loading}
+              />
+              <small className="input-hint">
+                Enter the URL of the book cover image
+              </small>
             </div>
 
+            {/* Description - Full Width */}
             <div className="form-group">
               <label htmlFor="description">Description</label>
               <textarea
@@ -352,7 +368,7 @@ const AddBook: React.FC = () => {
             </div>
           </div>
 
-          {/* Submit Actions */}
+          {/* ========== SUBMIT ACTIONS ========== */}
           <div className="form-actions">
             <button
               type="button"

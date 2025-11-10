@@ -11,7 +11,7 @@ const MainLayout: React.FC = () => {
         <Outlet />
       </main>
       <footer className="app-footer">
-        <p>&copy; 2025 IT Literature Shop. Made with ❤️ by Team P37</p>
+        <p>&copy; 2025 P37 Literature Shop. Made by Team P37</p>
       </footer>
     </div>
   );

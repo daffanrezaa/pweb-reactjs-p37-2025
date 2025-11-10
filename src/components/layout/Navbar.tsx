@@ -24,11 +24,7 @@ const Navbar = () => {
       <div className="navbar-container">
         {/* Logo/Brand */}
         <Link to="/" className="navbar-brand" onClick={closeMobileMenu}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" strokeWidth="2" strokeLinecap="round"/>
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" strokeWidth="2"/>
-          </svg>
-          <span>IT Literature Shop</span>
+          <span>P37 Literature Shop</span>
         </Link>
 
         {/* Desktop Navigation */}
