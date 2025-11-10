@@ -25,12 +25,23 @@ const BookList: React.FC = () => {
   
   const itemsPerPage = 12; // Show 12 books per load
 
+  // Debounce search term
   useEffect(() => {
-    // Reset to page 1 when filters change
+    const timer = setTimeout(() => {
+      setCurrentPage(1);
+      setBooks([]);
+      fetchBooks(1, true);
+    }, 400); // Wait 500ms after user stops typing
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  // Immediate effect for other filters
+  useEffect(() => {
     setCurrentPage(1);
     setBooks([]);
     fetchBooks(1, true);
-  }, [searchTerm, condition, sortBy, order]);
+  }, [condition, sortBy, order]);
 
   const fetchBooks = async (page: number = currentPage, reset: boolean = false) => {
     if (reset) {

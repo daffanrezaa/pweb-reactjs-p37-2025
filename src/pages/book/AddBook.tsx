@@ -103,8 +103,8 @@ const AddBook: React.FC = () => {
         title: formData.title.trim(),
         writer: formData.writer.trim(),
         publisher: formData.publisher.trim(),
-        price: formData.price,
-        stockQuantity: formData.stockQuantity,
+        price: Number(formData.price),
+        stockQuantity: Number(formData.stockQuantity),
         genreId: formData.genreId,
         publicationYear: formData.publicationYear, // ALWAYS INCLUDED NOW
       };

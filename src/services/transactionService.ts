@@ -107,8 +107,8 @@ export const getAllBooks = async (): Promise<Book[]> => {
         headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(BOOK_API_URL, { headers });
-    
+    const url = `${BOOK_API_URL}?limit=1000&sortBy=title&order=asc`;    
+    const response = await fetch(url, { headers });    
     const data = await response.json();
 
     if (!response.ok || data.success === false) {
